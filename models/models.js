@@ -3,7 +3,6 @@ const db = require('../db/connection');
 exports.selectTopics = () => {
     return db.query(`SELECT * FROM topics`)
         .then(({ rows: topics }) => {
-            
             return topics;
         })
 };
@@ -19,7 +18,6 @@ exports.selectArticles = () => {
         ORDER BY articles.created_at DESC`
       )
       .then(({ rows: articles }) => {
-        console.log(articles);
         return articles;
       });
 };
