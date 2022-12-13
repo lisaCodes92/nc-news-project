@@ -53,6 +53,14 @@ describe('GET', () => {
             });
           });
       });
+      it('returns the articles sorted by date in decending order', () => {
+        return request(app)
+          .get("/api/articles")
+          .expect(200)
+          .then(({ body: { articles } }) => {
+            expect(articles).toBeSortedBy('created_at', { descending: true });
+          });
+      });
     });
 });
 
