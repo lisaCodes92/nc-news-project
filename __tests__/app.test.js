@@ -21,10 +21,12 @@ describe('GET', () => {
           .then(({ body: { topics } }) => {
             expect(topics).toHaveLength(3);
             topics.forEach((topic) => {
-              expect.objectContaining({
-                description: expect.any(String),
-                slug: expect.any(String),
-              });
+              expect(topic).toEqual(
+                expect.objectContaining({
+                  description: expect.any(String),
+                  slug: expect.any(String),
+                })
+              );
             });
           });
       });
@@ -37,15 +39,17 @@ describe('GET', () => {
           .then(({ body: { articles } }) => {
             expect(articles).toHaveLength(12);
             articles.forEach((article) => {
-              expect.objectContaining({
-                author: expect.any(String),
-                title: expect.any(String),
-                article_id: expect.any(Number),
-                topic: expect.any(String),
-                created_at: expect.any(Date),
-                votes: expect.any(Number),
-                comment_count: expect.any(String),
-              });
+              expect(article).toEqual(
+                expect.objectContaining({
+                  author: expect.any(String),
+                  title: expect.any(String),
+                  article_id: expect.any(Number),
+                  topic: expect.any(String),
+                  created_at: expect.any(String),
+                  votes: expect.any(Number),
+                  comment_count: expect.any(String),
+                })
+              );
             });
           });
       });
