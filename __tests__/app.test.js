@@ -70,12 +70,12 @@ describe('GET', () => {
         .expect(200)
         .then(({ body: { article } }) => {
           expect.objectContaining({
-            author: expect.any(String),
-            title: expect.any(String),
-            article_id: expect.any(Number),
-            topic: expect.any(String),
-            created_at: expect.any(String),
-            votes: expect.any(Number),
+            author: "icellusedkars",
+            title: "Eight pug gifs that remind me of mitch",
+            article_id: 3,
+            topic: 'mitch',
+            created_at: '2020-11-03T09:12:00.000Z',
+            votes: 0,
           });
       })
     });
@@ -92,6 +92,15 @@ describe('Error handlers', () => {
                   expect(body.msg).toBe("No Such Path");
             })
         });
+      it('returns 404 when passed a valid article id that is not in the database', () => {
+        const ARTICLE_ID = 9999;
+        return request(app)
+          .get(`/api/articles/${ARTICLE_ID}`)
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).toBe("No Such Path");
+          });
+      });
     });
   describe('400 - bad request', () => {
     it('returns an error code of 404 when passed an invalid request', () => {

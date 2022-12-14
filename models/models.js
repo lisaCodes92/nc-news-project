@@ -26,7 +26,9 @@ exports.selectArticleById = (articleId) => {
   return db.query(`SELECT * FROM articles 
   WHERE articles.article_id = $1;`, [articleId])
     .then(({ rows: article }) => {
+      if(!article[0]){
+       return Promise.reject()  
+      }
       return article[0];
-    
   })
 }
