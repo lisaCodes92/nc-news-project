@@ -62,6 +62,24 @@ describe('GET', () => {
           });
       });
     });
+  describe('/api/articles/:article_id', () => {
+    it('returns the requested article selected by id', () => {
+      const ARTICLE_ID = 3;
+      return request(app)
+        .get(`/api/articles/${ARTICLE_ID}`)
+        .expect(200)
+        .then(({ body: { article } }) => {
+          expect.objectContaining({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+          });
+      })
+    });
+  });
 });
 
 describe('Error handlers', () => {
@@ -71,8 +89,19 @@ describe('Error handlers', () => {
                 .get('/api/cakes')
                 .expect(404)
                 .then(({ body }) => {
-                expect(body.msg).toBe("No Such Path");
+                  expect(body.msg).toBe("No Such Path");
             })
         });
     });
+  describe('400 - bad request', () => {
+    it('returns an error code of 404 when passed an invalid request', () => {
+      const ARTICLE_ID = 'banana';
+      return request(app)
+        .get(`/api/articles/${ARTICLE_ID}`)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe('Bad Request');
+      })
+    });
+  });
 });

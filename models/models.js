@@ -21,3 +21,12 @@ exports.selectArticles = () => {
         return articles;
       });
 };
+
+exports.selectArticleById = (articleId) => {
+  return db.query(`SELECT * FROM articles 
+  WHERE articles.article_id = $1;`, [articleId])
+    .then(({ rows: article }) => {
+      return article[0];
+    
+  })
+}
