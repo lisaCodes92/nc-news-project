@@ -1,6 +1,6 @@
 
 exports.invalidPathHandler = (req, res) => {
-    res.status(404).send({ msg: 'No Such Path' });
+    res.status(404).send({ msg: 'Path Not Found...' });
 };
 
 exports.badRequestHandler = (err, req, res, next) => {

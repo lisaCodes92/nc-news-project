@@ -11,7 +11,9 @@ beforeEach(() => {
 afterAll(() => {
   return db.end();
 });
+
 // GET
+
 describe("GET", () => {
   describe("/api/topics", () => {
     it("returns an array of topics that contain a description and a slug property", () => {
@@ -98,7 +100,7 @@ describe("GET", () => {
               created_at: expect.any(String),
               author: expect.any(String),
               body: expect.any(String),
-              article_id: expect.any(Number)
+              article_id: 5
             });
           });
         });
@@ -126,7 +128,11 @@ describe("GET", () => {
     
   });
 });
+
+// POST
+
 // Error Handlers
+
 describe("Error handlers", () => {
   describe("404 - path not found", () => {
     it("returns an error code of 404 when passed an invalid path", () => {
@@ -134,7 +140,7 @@ describe("Error handlers", () => {
         .get("/api/cakes")
         .expect(404)
         .then(({ body }) => {
-          expect(body.msg).toBe("No Such Path");
+          expect(body.msg).toBe("Path Not Found...");
         });
     });
 
@@ -144,9 +150,19 @@ describe("Error handlers", () => {
         .get(`/api/articles/${ARTICLE_ID}`)
         .expect(404)
         .then(({ body }) => {
-          expect(body.msg).toBe("No Such Path");
+          expect(body.msg).toBe("Path Not Found...");
         });
     });
+
+     it("GET comments - returns 404 when passed a valid article id that is not in the database ", () => {
+       const ARTICLE_ID = 9999;
+       return request(app)
+         .get(`/api/articles/${ARTICLE_ID}/comments`)
+         .expect(404)
+         .then(({ body }) => {
+           expect(body.msg).toBe("Path Not Found...");
+         });
+     });
       
   });
   describe("400 - bad request", () => {
@@ -154,6 +170,15 @@ describe("Error handlers", () => {
       const ARTICLE_ID = "banana";
       return request(app)
         .get(`/api/articles/${ARTICLE_ID}`)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    it("GET comments - returns an error code of 400 when passed an invalid request", () => {
+      const ARTICLE_ID = "banana";
+      return request(app)
+        .get(`/api/articles/${ARTICLE_ID}/comments`)
         .expect(400)
         .then(({ body }) => {
           expect(body.msg).toBe("Bad Request");

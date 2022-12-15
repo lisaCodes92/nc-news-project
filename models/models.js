@@ -33,7 +33,20 @@ exports.selectArticleById = (articleId) => {
   })
 }
 
+exports.checkArticleExists = (articleId) => {
+  return db
+    .query(`SELECT * FROM articles
+  WHERE article_id = $1`, [articleId])
+    .then(({rowCount}) => {
+      if (rowCount === 0) {
+        return Promise.reject()
+      }
+      return true;
+  })
+};
+
 exports.selectArticleComments = (articleId) => {
+  console.log(articleId)
   return db
     .query(`SELECT * 
   FROM comments
