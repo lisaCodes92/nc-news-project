@@ -11,7 +11,7 @@ beforeEach(() => {
 afterAll(() => {
     return db.end();
 });
-
+// GET
 describe('GET', () => {
     describe("/api/topics", () => {
       it("returns an array of topics that contain a description and a slug property", () => {
@@ -81,7 +81,7 @@ describe('GET', () => {
     });
   });
 });
-
+// Error Handlers
 describe('Error handlers', () => {
     describe('404 - path not found', () => {
         it('returns an error code of 404 when passed an invalid path', () => {
@@ -101,6 +101,7 @@ describe('Error handlers', () => {
             expect(body.msg).toBe("No Such Path");
           });
       });
+      
     });
   describe('400 - bad request', () => {
     it('returns an error code of 404 when passed an invalid request', () => {

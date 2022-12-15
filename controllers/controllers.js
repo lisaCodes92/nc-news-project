@@ -31,3 +31,7 @@ exports.getArticleById = (req, res, next) => {
             next(err);
         })
 };
+
+exports.postComment = (req, res, next) => {
+const articleId = req.params.article_id;
+}
