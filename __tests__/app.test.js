@@ -98,6 +98,7 @@ describe("GET", () => {
               created_at: expect.any(String),
               author: expect.any(String),
               body: expect.any(String),
+              article_id: expect.any(Number)
             });
           });
         });
@@ -110,6 +111,7 @@ describe("GET", () => {
         .expect(200)
         .then(({ body: { comments } }) => {
           expect(comments).toBeInstanceOf(Array);
+          expect(comments.length).toBe(0);
         });
     });
     it("returns the comments sorted by date in decending order", () => {
@@ -121,6 +123,7 @@ describe("GET", () => {
           expect(comments).toBeSortedBy("created_at", { descending: true });
         });
     });
+    
   });
 });
 
