@@ -32,3 +32,14 @@ exports.selectArticleById = (articleId) => {
       return article[0];
   })
 }
+
+exports.selectArticleComments = (articleId) => {
+  return db
+    .query(`SELECT * 
+  FROM comments
+  WHERE article_id = $1
+  ORDER BY created_at DESC `, [articleId])
+    .then(({ rows: comments }) => {
+      return comments;
+    })
+};
