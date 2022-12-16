@@ -33,6 +33,19 @@ exports.selectArticleById = (articleId) => {
   })
 }
 
+exports.checkArticleExists = (articleId) => {
+  return db
+    .query(`SELECT * FROM articles
+  WHERE article_id = $1`, [articleId])
+    .then(({rowCount}) => {
+      if (rowCount === 0) {
+        return Promise.reject()
+      }
+      return true;
+  })
+};
+
+
 exports.selectArticleComments = (articleId) => {
   return db
     .query(`SELECT * 
@@ -43,3 +56,19 @@ exports.selectArticleComments = (articleId) => {
       return comments;
     })
 };
+
+exports.insertComment = (articleId, author, body) => {
+  
+  return db
+    .query(
+      `INSERT INTO comments
+    (article_id, author, body)
+    VALUES
+    ($1, $2, $3)
+    RETURNING *;`,
+      [articleId, author, body]
+    )
+    .then(({ rows: comment }) => {
+      return {comment: comment[0]};
+    });
+}
