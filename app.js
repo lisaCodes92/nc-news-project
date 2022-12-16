@@ -5,7 +5,10 @@ const {
   serverErrorHandler,
   invalidPathHandler,
   badRequestHandler,
+  invalidEndPointHandler,
 } = require("./errors.js");
+
+app.use(express.json());
 
 
 app.get('/api/topics', getTopics);
@@ -20,8 +23,11 @@ app.post("/api/articles/:article_id/comments", postComment);
 
 app.all('*', invalidPathHandler);
 
+app.use(invalidEndPointHandler);
 app.use(badRequestHandler);
+
 app.use(serverErrorHandler);
+
 
 
 module.exports = app;

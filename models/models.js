@@ -45,8 +45,8 @@ exports.checkArticleExists = (articleId) => {
   })
 };
 
+
 exports.selectArticleComments = (articleId) => {
-  console.log(articleId)
   return db
     .query(`SELECT * 
   FROM comments
@@ -56,3 +56,19 @@ exports.selectArticleComments = (articleId) => {
       return comments;
     })
 };
+
+exports.insertComment = (articleId, author, body) => {
+  
+  return db
+    .query(
+      `INSERT INTO comments
+    (article_id, author, body)
+    VALUES
+    ($1, $2, $3)
+    RETURNING *;`,
+      [articleId, author, body]
+    )
+    .then(({ rows: comment }) => {
+      return {comment: comment[0]};
+    });
+}
