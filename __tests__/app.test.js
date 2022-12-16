@@ -160,3 +160,13 @@ describe("Error handlers", () => {
     });
   });
 });
+
+
+
+describe('PATCH', () => {
+  describe('/api/articles/article_id', () => {
+    it('should ', () => {
+      
+    });
+  });
+});
