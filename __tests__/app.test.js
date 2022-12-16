@@ -12,8 +12,6 @@ afterAll(() => {
   return db.end();
 });
 
-// GET
-
 describe("GET", () => {
   
   describe("/api/topics", () => {
@@ -168,7 +166,6 @@ describe("GET", () => {
 
 });
 
-  // POST
   describe('POST', () => {
     
     describe('/api/articles/:article_id/comments', () => {
@@ -268,12 +265,12 @@ describe("GET", () => {
           .send(newComment)
           .expect(404)
           .then(({ body }) => {
-            expect(body.msg).toBe("Path Not Found...");
+            expect(body.msg).toBe("Not Found");
           });
       });
     });
   });
-  // Error Handlers
+
 
   describe("Error handlers", () => {
     describe("404 - path not found", () => {
