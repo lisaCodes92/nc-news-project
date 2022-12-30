@@ -4,7 +4,8 @@ const {
     selectArticleById,
     checkArticleExists,
     selectArticleComments,
-    insertComment
+    insertComment,
+    updateArticle,
 } = require('../models/models.js');
 
 exports.getTopics = (req, res, next) => {
@@ -69,4 +70,21 @@ exports.postComment = (req, res, next) => {
         .catch((err) => {
             next(err);
         })
+};
+
+exports.patchArticle = (req, res, next) => {
+    const articleId = req.params.article_id;
+    const voteInc = req.body.inc_votes;
+    console.log(voteInc)
+
+    checkArticleExists(articleId)
+        .then(() => {
+            return updateArticle(articleId, voteInc)
+        })
+        .then((article) => {
+            res.status(200).send(article);
+        })
+        .catch((err) => {
+            next(err);
+        });
 };
