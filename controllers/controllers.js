@@ -9,8 +9,10 @@ const {
 } = require('../models/models.js');
 
 exports.getTopics = (req, res, next) => {
+    console.log("got here");
     selectTopics()
         .then((topics) => {
+            console.log(topics);
             res.status(200).send({ topics });
         })
         .catch((err) => {
@@ -75,7 +77,6 @@ exports.postComment = (req, res, next) => {
 exports.patchArticle = (req, res, next) => {
     const articleId = req.params.article_id;
     const voteInc = req.body.inc_votes;
-    console.log(voteInc)
 
     checkArticleExists(articleId)
         .then(() => {
