@@ -27,14 +27,14 @@ app.use(express.json());
 
 app.use(cors());
 
-app.use("/api/topics", topicsRouter);
+//app.use("/api/topics", topicsRouter);
 // app.use("/api/articles", apiArticlesRouter);
 
 //GET /api/topics
-//app.get("/api/topics", getTopics);
+app.get("/api/topics", getTopics);
 
 //GET /api/articles
-//app.get("/api/articles", getArticles);
+app.get("/api/articles", getArticles);
 
 //GET /api/articles/:article_id
 app.get("/api/articles/:article_id", getArticleById);
