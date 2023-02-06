@@ -94,4 +94,8 @@ exports.updateArticle = (articleId, voteInc) => {
     });
 };
 
-
+exports.selectUsers = () => {
+  return db.query(`SELECT * FROM users`).then(({ rows: users }) => {
+    return users;
+  })
+}
