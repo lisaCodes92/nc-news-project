@@ -6,13 +6,12 @@ const {
     selectArticleComments,
     insertComment,
     updateArticle,
+    selectUsers,
 } = require('../models/models.js');
 
 exports.getTopics = (req, res, next) => {
-    console.log("got here");
     selectTopics()
         .then((topics) => {
-            console.log(topics);
             res.status(200).send({ topics });
         })
         .catch((err) => {
@@ -88,4 +87,14 @@ exports.patchArticle = (req, res, next) => {
         .catch((err) => {
             next(err);
         });
+};
+
+exports.getUsers = (req, res, next) => {
+    selectUsers()
+        .then((users) => {
+        res.status(200).send({ users });
+      })
+      .catch((err) => {
+        next(err);
+      });
 };
