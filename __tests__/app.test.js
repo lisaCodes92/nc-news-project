@@ -62,6 +62,59 @@ describe('GET', () => {
           expect(articles).toBeSortedBy('created_at', { descending: true });
         });
     });
+    it('returns an array of articles filtered by topic', () => {
+      return request(app)
+        .get('/api/articles?topic=cats')
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toHaveLength(1);
+          articles.forEach((article) => {
+            expect(article).toEqual(
+              expect.objectContaining({
+                author: expect.any(String),
+                title: expect.any(String),
+                article_id: expect.any(Number),
+                topic: 'cats',
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+                comment_count: expect.any(String),
+              })
+            );
+          });
+        });
+    });
+    it('can sort the article by votes', () => {
+      return request(app)
+        .get('/api/articles?sort_by=votes')
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeSortedBy('votes', { descending: true });
+        });
+    });
+    it('rejects invalid sort requests', () => {
+      return request(app)
+        .get('/api/articles?sort_by=cake')
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe('Bad Request');   
+        });
+    });
+    it("can order the article by asc value", () => {
+      return request(app)
+        .get("/api/articles?order_by=asc")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeSortedBy('created_at', {descending: false});
+        });
+    });
+     it('rejects invalid sort requests', () => {
+       return request(app)
+         .get("/api/articles?order_by=cake")
+         .expect(400)
+         .then(({ body }) => {
+           expect(body.msg).toBe("Bad Request");
+         });
+     });
   });
 
   describe('/api/articles/:article_id', () => {
@@ -81,6 +134,23 @@ describe('GET', () => {
           });
         });
     });
+    it('returns the requested article selected by with comment count', () => {
+      const ARTICLE_ID = 5;
+      return request(app)
+        .get(`/api/articles/${ARTICLE_ID}`)
+        .expect(200)
+        .then(({ body: { article } }) => {
+          expect(article).toMatchObject({
+            author: 'rogersop',
+            title: 'UNCOVERED: catspiracy to bring down democracy',
+            article_id: 5,
+            topic: 'cats',
+            created_at: '2020-08-03T13:14:00.000Z',
+            votes: 0,
+            comment_count: '2',
+          });
+        });
+    });
     it('returns 404 when passed a valid article id that is not in the database', () => {
       const ARTICLE_ID = 9999;
       return request(app)
@@ -90,7 +160,6 @@ describe('GET', () => {
           expect(body.msg).toBe('Path Not Found...');
         });
     });
-
     it('returns an error code of 400 when passed an invalid request', () => {
       const ARTICLE_ID = 'banana';
       return request(app)
@@ -111,7 +180,7 @@ describe('GET', () => {
         .then(({ body: { comments } }) => {
           expect(comments).toBeInstanceOf(Array);
           comments.forEach((comment) => {
-            expect.objectContaining({
+            expect(comment).toStrictEqual({
               comment_id: expect.any(Number),
               votes: expect.any(Number),
               created_at: expect.any(String),
@@ -369,6 +438,12 @@ describe('PATCH', () => {
   });
 });
 
+describe('DELETE', () => {
+  describe('/:article_id/comments/comment_id', () => {
+    
+  });
+});
+
 describe('Error handlers', () => {
   describe('404 - path not found', () => {
     it('returns an error code of 404 when passed an invalid path', () => {
@@ -393,5 +468,3 @@ describe('Error handlers', () => {
     });
   });
 });
-
-

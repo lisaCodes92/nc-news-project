@@ -1,4 +1,4 @@
-const db = require("../db/connection");
+const db = require('../db/connection');
 
 exports.selectTopics = () => {
   return db.query(`SELECT * FROM topics`).then(({ rows: topics }) => {
@@ -6,15 +6,32 @@ exports.selectTopics = () => {
   });
 };
 
-exports.selectArticles = () => {
+exports.selectArticles = (topic, sort_by, order_by) => {
+  if (!topic) {
+    return db
+      .query(
+        `SELECT articles.article_id, articles.author, articles.title, articles.topic, articles.created_at, articles.votes, 
+      COUNT(comments.article_id) AS comment_count
+      FROM articles
+      LEFT JOIN comments on comments.article_id = articles.article_id
+      GROUP BY articles.article_id
+      ORDER BY articles.${sort_by} ${order_by}`
+      )
+      .then(({ rows: articles }) => {
+        return articles;
+      });
+  }
+
   return db
     .query(
       `SELECT articles.article_id, articles.author, articles.title, articles.topic, articles.created_at, articles.votes, 
       COUNT(comments.article_id) AS comment_count
       FROM articles
       LEFT JOIN comments on comments.article_id = articles.article_id
+      WHERE articles.topic = $1
       GROUP BY articles.article_id
-      ORDER BY articles.created_at DESC`
+      ORDER BY articles.${sort_by} DESC`,
+      [topic]
     )
     .then(({ rows: articles }) => {
       return articles;
@@ -24,14 +41,19 @@ exports.selectArticles = () => {
 exports.selectArticleById = (articleId) => {
   return db
     .query(
-      `SELECT * FROM articles 
-    WHERE article_id = $1;`,
+      `SELECT articles.article_id, articles.author, articles.title, articles.topic, articles.created_at, articles.votes, 
+      COUNT(comments.article_id) AS comment_count
+      FROM articles
+      LEFT JOIN comments on comments.article_id = articles.article_id
+      WHERE articles.article_id = $1
+      GROUP BY articles.article_id`,
       [articleId]
     )
     .then(({ rows: article }) => {
       if (!article[0]) {
         return Promise.reject();
       }
+      console.log(article[0]);
       return article[0];
     });
 };
@@ -97,5 +119,9 @@ exports.updateArticle = (articleId, voteInc) => {
 exports.selectUsers = () => {
   return db.query(`SELECT * FROM users`).then(({ rows: users }) => {
     return users;
-  })
-}
+  });
+};
+
+// exports.deleteCommentById = () => {
+
+// }
