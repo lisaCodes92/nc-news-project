@@ -250,6 +250,12 @@ describe("GET", () => {
         });
     });
   });
+
+  describe("/api", () => {
+    it("returns a JSON describing the endpoints.json", () => {
+      return request(app).get("/api").expect(200);
+    });
+  });
 });
 
 describe("POST", () => {
@@ -438,7 +444,7 @@ describe('PATCH', () => {
   });
 });
 
-describe.only('DELETE', () => {
+describe('DELETE', () => {
   describe('/comments/comment_id', () => {
     it('deletes a comment selected by id', () => {
       const COMMENT_ID = 1
