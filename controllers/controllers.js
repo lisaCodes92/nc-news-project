@@ -104,11 +104,10 @@ exports.getUsers = (req, res, next) => {
     });
 };
 
-// exports.removeCommentById = (req, res, next) => {
-//     const commentId = req.params.comment_id;
-//     console.log(commentId)
-//     deleteCommentById(commentId)
-//         .then(() => {
-        
-//     })
-// };
+exports.removeCommentById = (req, res, next) => {
+  const commentId = req.params.comment_id;
+    deleteCommentById(commentId)
+        .then((ids) => {
+          res.send(204);
+    })
+};
