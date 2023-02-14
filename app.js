@@ -7,11 +7,15 @@ const {
 } = require('./errors.js');
 const apiRouter = require('./routes/api.router');
 const app = express();
+const data = require('./endpoints.json')
 
 app.use(express.json());
 
-app.use('/api', apiRouter);
+app.get('/api', (req, res,) => {
+  res.json(data);
+})
 
+app.use('/api', apiRouter);
 
 const cors = require('cors');
 app.use(cors());
