@@ -122,6 +122,12 @@ exports.selectUsers = () => {
   });
 };
 
-// exports.deleteCommentById = () => {
-
-// }
+exports.deleteCommentById = (commentId) => {
+  return db.query(
+    `DELETE FROM comments
+    WHERE comment_id = $1`,
+  [commentId])
+    .then(({ rows: ids }) => {
+      return ids;
+  })
+}
